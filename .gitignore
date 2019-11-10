@@ -1,3 +1,8 @@
+# Vendors
+cmock/
+mocks/
+unity/
+
 # Prerequisites
 *.d
 
