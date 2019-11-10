@@ -1,2 +1,2 @@
 # calculator
-Testing arithtmetic functions using CMock
+Testing arithtmetic functions using Unity and CMock
