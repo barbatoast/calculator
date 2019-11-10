@@ -3,6 +3,13 @@ cmock/
 mocks/
 unity/
 
+# Binaries
+calc
+test_add
+test_div
+test_mul
+test_sub
+
 # Prerequisites
 *.d
 

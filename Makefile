@@ -1,19 +1,19 @@
 CC      := gcc
 CCFLAGS := \
-	-std=c89 						\
-	-Wall							\
-	-Wextra							\
-	-Wpointer-arith					\
-	-Wcast-align					\
-	-Wwrite-strings					\
-	-Wswitch-default				\
-	-Wunreachable-code				\
-	-Winit-self						\
-	-Wmissing-field-initializers	\
-	-Wno-unknown-pragmas			\
-	-Wstrict-prototypes				\
-	-Wundef							\
-	-Wold-style-definition			\
+	-std=c89                        \
+	-Wall                           \
+	-Wextra                         \
+	-Wpointer-arith                 \
+	-Wcast-align                    \
+	-Wwrite-strings                 \
+	-Wswitch-default                \
+	-Wunreachable-code              \
+	-Winit-self                     \
+	-Wmissing-field-initializers    \
+	-Wno-unknown-pragmas            \
+	-Wstrict-prototypes             \
+	-Wundef                         \
+	-Wold-style-definition          \
 	-Wno-misleading-indentation
 LDFLAGS :=
 
@@ -30,16 +30,16 @@ TST_INC_DIR := -I$(UNITYDIR) -I$(CMOCKDIR) -I$(MOCKDIR)
 TARGET:= calc
 MAIN_BASE := $(addsuffix .o, $(TARGET))
 MAIN := $(addprefix $(SRCDIR), $(MAIN_BASE))
-OBJ_BASE := add.o div.o sub.o mul.o
+OBJ_BASE := add.o div.o mul.o sub.o
 OBJ := $(addprefix $(SRCDIR), $(OBJ_BASE))
 MOCK_OBJ := $(addprefix $(MOCKPREFIX), $(OBJ_BASE))
 MOCK_SRC := $(patsubst %.o, %.c, $(MOCK_OBJ))
 OBJ += $(MAIN)
-DEP_BASE := add.h div.h sub.h mul.h
+DEP_BASE := add.h div.h mul.h sub.h
 DEP := $(addprefix $(SRCDIR), $(DEP_BASE))
 MOCK_DEP := $(addprefix $(MOCKPREFIX), $(DEP_BASE))
 
-TST_TARGET := test_add test_div test_sub test_mul
+TST_TARGET := test_add test_div test_mul test_sub
 TST_MAIN_BASE := $(addsuffix .o, $(TST_TARGET))
 TST_MAIN := $(addprefix $(TSTDIR), $(TST_MAIN_BASE))
 TST_OBJ_BASE := unity.o
@@ -73,20 +73,20 @@ $(MOCK_OBJ) : %.o : %.c $(TST_DEP)
 $(TST_OBJ) : %.o : %.c $(TST_DEP)
 	$(CC) $(TST_INC_DIR) $(INC_DIR) -c -o $@ $< $(CCFLAGS)
 
-#$(TST_TARGET) : test_% : $(filter-out $(TST_MAIN), $(TST_OBJ)) $(MOCK_OBJ) $(TSTDIR)test_%.o	\
+#$(TST_TARGET) : test_% : $(filter-out $(TST_MAIN), $(TST_OBJ)) $(MOCK_OBJ) $(TSTDIR)test_%.o \
 #	$(SRCDIR)%.o
 #	$(CC) -o $@ $(LIBS) $^ $(CCFLAGS) $(LDFLAGS)
 
 test_add : test_% : $(filter-out $(TST_MAIN), $(TST_OBJ)) $(TSTDIR)test_%.o $(SRCDIR)%.o
 	$(CC) -o $@ $(LIBS) $^ $(CCFLAGS) $(LDFLAGS)
 
-test_div : test_% : $(filter-out $(TST_MAIN), $(TST_OBJ)) $(TSTDIR)test_%.o $(SRCDIR)%.o	\
+test_div : test_% : $(filter-out $(TST_MAIN), $(TST_OBJ)) $(TSTDIR)test_%.o $(SRCDIR)%.o \
+	$(MOCKPREFIX)add.o $(MOCKPREFIX)sub.o
+	$(CC) -o $@ $(LIBS) $^ $(CCFLAGS) $(LDFLAGS)
+
+test_mul : test_% : $(filter-out $(TST_MAIN), $(TST_OBJ)) $(TSTDIR)test_%.o $(SRCDIR)%.o \
 	$(MOCKPREFIX)add.o $(MOCKPREFIX)sub.o
 	$(CC) -o $@ $(LIBS) $^ $(CCFLAGS) $(LDFLAGS)
 
 test_sub : test_% : $(filter-out $(TST_MAIN), $(TST_OBJ)) $(TSTDIR)test_%.o $(SRCDIR)%.o
-	$(CC) -o $@ $(LIBS) $^ $(CCFLAGS) $(LDFLAGS)
-
-test_mul : test_% : $(filter-out $(TST_MAIN), $(TST_OBJ)) $(TSTDIR)test_%.o $(SRCDIR)%.o	\
-	$(MOCKPREFIX)add.o $(MOCKPREFIX)sub.o
 	$(CC) -o $@ $(LIBS) $^ $(CCFLAGS) $(LDFLAGS)
