@@ -59,7 +59,12 @@ clean :
 setup :
 	ruby $(CMOCKLIB)cmock.rb $(DEP)
 
-test : setup $(TST_TARGET)
+check :
+	@echo "\n######################## Running cppcheck ########################\n"
+	cppcheck --quiet --std=c89 --enable=style,warning,performance,portability,unusedFunction \
+	$(SRCDIR) $(TSTDIR)
+
+test : setup $(TST_TARGET) check
 
 $(OBJ) : %.o : %.c $(DEP)
 	$(CC) $(INC_DIR) -c -o $@ $< $(CCFLAGS)
